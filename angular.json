@@ -29,7 +29,7 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["src/styles.scss"],
             "scripts": [],
-            "extraWebpackConfig": "webpack.config.js"
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "production": {
@@ -66,9 +66,6 @@
         },
         "serve": {
           "builder": "ngx-build-plus:dev-server",
-          "options": {
-            "extraWebpackConfig": "webpack.config.js"
-          },
           "configurations": {
             "production": {
               "browserTarget": "worker-basics:build:production"
