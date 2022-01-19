@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
     if (typeof Worker !== 'undefined') {
       // Create a new
       console.log(import.meta.url);
-      this.worker = new SharedWorker('/assets/shared-worker.worker.js');
+      this.worker = new SharedWorker(new URL('./app.shared.worker', import.meta.url));
       this.worker.port.onmessage = ({ data }) => {
         console.log(data);
       };
