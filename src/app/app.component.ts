@@ -7,8 +7,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   title = 'worker-basics';
+  worker!: SharedWorker;
 
   ngOnInit(): void {
+    if (typeof Worker !== 'undefined') {
+      // Create a new
+      console.log(import.meta.url);
+      this.worker = new SharedWorker('/assets/shared-worker.worker.js');
+      this.worker.port.onmessage = ({ data }) => {
+        console.log(data);
+      };
+      this.worker.port.onmessageerror = (error) => {
+        console.error('Error message received from worker:', error);
+      };
+      // setTimeout(() => {
+      //   worker.terminate();
+      //   console.log('terminated');
+      // }, 1000);
+    } else {
+      // Web Workers are not supported in this environment.
+      // You should add a fallback so that your program still executes correctly.
+    }
     // const result = this.#generateFibonacci(42);
     // console.log(result);
   }
@@ -19,24 +38,8 @@ export class AppComponent implements OnInit {
   //   }
   //   return this.#generateFibonacci(n - 1) + this.#generateFibonacci(n - 2);
   // };
-}
 
-if (typeof Worker !== 'undefined') {
-  // Create a new
-  console.log(import.meta.url);
-  const worker = new Worker(new URL('./app.worker', import.meta.url));
-  worker.onmessage = ({ data }) => {
-    console.log(data);
-  };
-  worker.onerror = (error) => {
-    console.error('Error message received from worker:', error);
-  };
-  worker.postMessage({ action: 'generateFibonacci', param: 42 });
-  // setTimeout(() => {
-  //   worker.terminate();
-  //   console.log('terminated');
-  // }, 1000);
-} else {
-  // Web Workers are not supported in this environment.
-  // You should add a fallback so that your program still executes correctly.
+  postMsg() {
+    this.worker.port.postMessage({ action: 'generateFibonacci', param: 42 });
+  }
 }
